@@ -1,8 +1,9 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx
-  # labels related to deployment resource
+  namespace: default
   labels:
     project: roboshop
     tier: frontend
@@ -16,7 +17,6 @@ spec:
       tier: frontend
       component: frontend
       purpose: deployment
-  # Pod
   template:
     metadata:
       labels:
@@ -26,23 +26,22 @@ spec:
         purpose: deployment
     spec:
       containers:
-      - name: nginx
-        image: nginx:latest
-        ports:
-        - containerPort: 80
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: nginx
-  # servicer labels
+  namespace: default
   labels:
     project: roboshop
     tier: frontend
     component: frontend
     purpose: deployment
 spec:
-  # Service uses the below labels to select the pods
   selector:
     project: roboshop
     tier: frontend
@@ -50,5 +49,5 @@ spec:
     purpose: deployment
   ports:
     - protocol: TCP
-      port: 80 # service port
-      targetPort: 80 # container port
+      port: 80
+      targetPort: 80
